@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wild Series{% endblock %}
+
+{% block body %}
+<h1>Program {{ id }}</h1>
+
+<h1>Voici les saisons</h1>
+{% for season in seasons %}
+    <p>
+    Saison n° {{ season.number }} 
+    - Année : {{ season.year }} 
+    - Description : {{ season.description }} 
+    {# <a href="{{ path("program_show", { programId: program.id },{ seasonId: season.id } ) }}">Lien vers les épisodes</a> #}
+    <a href="{{ path("program_season_show", { programId: program.id, seasonId: season.id }) }}">Lien vers les épisodes</a>
+    </p>
+
+{% endfor %}
+
+{# <p>{{ program.title }}</p>
+<p>{{ program.synopsis }}</p>
+<p>{{ program.poster }}</p>
+<p>{{ program.category.name }}</p> #}
+<pre>
+    {{ dump(program) }}
+    {{ dump(seasons) }}
+</pre>
+{% endblock %}

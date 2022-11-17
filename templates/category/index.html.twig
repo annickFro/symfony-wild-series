@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wild Series{% endblock %}
+
+{% block body %}
+<h1>{{ website }} index</h1>
+{% for category in categories %}
+    <p>{{ loop.index }}  {{ category.id }} -  {{ category.name }}
+    <a href="{{ path('category_index') }}{{ category.name }}/">Lien</a>
+    </p>
+{% else %}
+    <p>Aucune catégorie trouvée.</p>
+{% endfor %}
+
+<a href="{{ path('app_index') }}">
+    Retour à l'accueil
+</a>
+<pre>
+    {{ dump(categories) }}
+</pre>
+
+{% endblock %}

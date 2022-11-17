@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wild Series{% endblock %}
+
+{% block body %}
+<section class="container">
+    <h1>Saison {{ seasonId }} de <em>{{ program.title }}</em></h1>
+    <h2>{{ program.synopsis }}</h2>
+    <h3>Liste des épisodes</h3>
+        <ul>
+            {% for episode in episodes %}
+                <li>Episode {{ episode.number }} : {{ episode.title }} </li>
+            {% endfor %}
+        </ul>
+    <pre>
+        {{ dump(programId, episodes, program) }}
+    </pre>
+</section>
+{% endblock %}

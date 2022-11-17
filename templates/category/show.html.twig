@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wild Series -dans category/show-{% endblock %}
+
+{% block body %}
+<h1>Category {{ category }}</h1>
+{# <pre>
+    {{ dump(category) }}
+    {{ dump(programs) }}
+</pre> #}
+{% for program in programs %}
+    <p>{{ program.id }}  {{ program.title }}  {{ program.poster }}</p>
+    <a href="{{ path('program_index') }}{{ program.id }}/">
+    fiche film
+    </a>
+{% endfor %}
+{# 
+<p>{{ program.title }}</p>
+<p>{{ program.synopsis }}</p>
+<p>{{ program.poster }}</p>
+<p>{{ program.category.name }}</p> #}
+{% endblock %}

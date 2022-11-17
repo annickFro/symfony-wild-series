@@ -1,21 +1,31 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+{% extends 'base.html.twig' %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}
-            <h1>{{ website }} index</h1>
-        {% endblock %}
-    </body>
-</html>
+{% block title %}Wild Series{% endblock %}
+
+{% block body %}
+<h1>{{ website }} index</h1>
+{% for program in programs %}
+    <p>
+    {{ loop.index }}  id={{ program.id }}
+    <br>
+    {{ program.title }} 
+    <br>
+    {{ program.synopsis }} 
+    <br>
+    {{ program.poster }}
+    <br>
+    {{ program.category.name }}
+    <a href="{{ path("program_show", { id: program.id }) }}">Voir la fiche</a>
+    </p>
+{% else %}
+    <p>Aucune série trouvée.</p>
+{% endfor %}
+
+<pre>
+    {{ dump(programs) }}
+</pre>
+<a href="{{ path('app_index') }}">
+    Retour à l'accueil
+</a>
+
+{% endblock %}
