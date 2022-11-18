@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CategoryRepository;
 use App\Repository\ProgramRepository;
+use App\Form\CategoryType;
+use App\Entity\Category;
+use Symfony\Component\HttpFoundation\Request;
 
 
 #[Route('/category', name: 'category_')]
@@ -19,6 +22,36 @@ class CategoryController extends AbstractController
         // var_dump($categories) ;
         return $this->render('category/index.html.twig', ['website' => 'Wild Series',
         'categories'=>$categories]) ;
+    }
+
+    /*
+    ** NEW
+    */
+    #[Route('/new/', name:'new')]
+    public function new(Request $request, CategoryRepository $categoryRepository):Response
+    {
+        $category = new Category() ;
+
+        // Create the form, linked with $category
+        $form = $this->createForm(CategoryType::class, $category);
+
+        // Get data from HTTP request
+        $form->handleRequest($request);
+
+        // Was the form submitted ?
+        if ($form->isSubmitted()) {
+            // Deal with the submitted data
+            // For example : persiste & flush the entity
+            // And redirect to a route that display the result
+            $categoryRepository->save($category, true); 
+
+            // Redirect to categories list
+            return $this->redirectToRoute('category_index');
+        }
+
+        return $this->renderForm('category/new.html.twig', [
+            'form' => $form,
+        ]);
     }
 
     #[Route('/{categoryName}/', name: 'show')]
@@ -43,5 +76,8 @@ class CategoryController extends AbstractController
             'programs' => $programs
         ]) ;
     }
+
+    
+
 
 }

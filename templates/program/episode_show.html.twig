@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wild Series{% endblock %}
+
+{% block body %}
+<section class="container">
+    <h1>Detail episode </h1>
+        <p>{{ episode.title }}</p>
+        <p>{{ episode.number }}</p>
+        <p>{{ episode.synopsis }}</p>
+    <pre>
+        <pre>
+            {{ dump(episode) }}
+        </pre>
+    </pre>
+</section>
+{% endblock %}
