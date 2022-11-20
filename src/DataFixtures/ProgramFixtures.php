@@ -32,6 +32,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         //  on retounr les classes de fixtures dont cette classe dépend
         return [
             CategoryFixtures::class,
+            // ActorFixtures::class,
         ] ;
 
     }
