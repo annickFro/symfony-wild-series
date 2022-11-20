@@ -162,7 +162,7 @@ class Program
         return $this;
     }
 
-    public function removeActor(Actor $actor): self
+    public function remover(Actor $actor): self
     {
         if ($this->actors->removeElement($actor)) {
             $actor->removeProgram($this);
