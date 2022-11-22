@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Program;
+use App\Entity\Comment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\EpisodeRepository;
+use App\Repository\CommentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\ProgramType;
+use App\Form\CommentType;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -100,21 +103,46 @@ class ProgramController extends AbstractController
         ]) ;
     }
 
-    #[Route('/{programId}/season/{seasonId}/episode/{episodeId}', requirements: ['programId'=>'\d+'], methods: ['GET'], name: 'episode_show')]
+    /**
+     * Detail episode
+     */
+    #[Route('/{programId}/season/{seasonId}/episode/{episodeId}', requirements: ['programId'=>'\d+'], methods: ['GET', 'POST'], name: 'episode_show')]
     public function showEpisode(int $programId, int $seasonId, int $episodeId, 
-        ProgramRepository $programRepository,
         EpisodeRepository $episodeRepository,
+        Request $request,
+        CommentRepository $commentRepository
         ): Response
     {
-        // $program = $programRepository->findOneBy(['id' => $programId]);
         $episode = $episodeRepository->findOneBy(['id' => $episodeId]) ;
+
+        // add form to allow comments BEGIN =============================================
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid() ) {
+
+            $comment->setAuthor($this->getUser()) ;
+            $comment->setEpisode($episode) ;
+            // var_dump($comment); die () ;
+            $commentRepository->save($comment, true); 
+            // Redirect to categories list
+            return $this->redirectToRoute('program_index');
+        }
+        // add form to allow comments END   =============================================
+
+        // load the comments
+        $comments = $commentRepository->findBy(['episode' => $episodeId], ['id' => 'DESC']) ;
+
         return $this->render('program/episode_show.html.twig', [
             'website' => 'Wild Series',
             // 'program'=>$program,
             'programId' => $programId,
             'seasonId' => $seasonId,
             'episodeId' => $episodeId,
-            'episode' => $episode
+            'episode' => $episode,
+            'form' => $commentForm->createView(),
+            'comments' => $comments   
             // 'seasons'=>$seasons
         ]) ;
     }
