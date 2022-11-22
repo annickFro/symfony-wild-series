@@ -5,13 +5,37 @@
 {% block body %}
 <section class="container">
     <h1>Detail episode </h1>
-        <p>{{ episode.title }}</p>
-        <p>{{ episode.number }}</p>
-        <p>{{ episode.synopsis }}</p>
+    <p>{{ episode.title }}</p>
+    <p>{{ episode.number }}</p>
+    <p>{{ episode.synopsis }}</p>
+
+    <h2>Existig comments</h2>
+    {% for comment in comments %}
+        <ul>
+            <li>{{ comment.comment }}</li>
+            <li>{{ comment.author.email }}</li>
+        </ul>
+    {% endfor %}
+    {% if app.user %}
+        <p>Utilisateur est connecté => il pourra commenter Formulaire</p>
+        <div class="commentTheEpisode">
+
+            <h2>Add a comment</h2>
+            {# {{ form(form) }} #}
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit">Add comment</button>
+            {{ form_end(form) }}
+
+        </div>  
+    {% else %}
+        <p>Utilisateur non connecté -> no comment</p>    
+    {% endif %}
+
     <pre>
-        <pre>
-            {{ dump(episode) }}
-        </pre>
+        {{ dump(comments) }}
+        {{ dump(episode) }}
     </pre>
 </section>
 {% endblock %}
