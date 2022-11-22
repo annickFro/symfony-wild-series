@@ -14,6 +14,7 @@ use App\Repository\CommentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\ProgramType;
 use App\Form\CommentType;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -33,7 +34,7 @@ class ProgramController extends AbstractController
     ** NEW
     */
     #[Route('/new/', name:'new')]
-    public function new(Request $request, ProgramRepository $programRepository):Response
+    public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger):Response
     {
         $program = new Program();
 
@@ -48,6 +49,10 @@ class ProgramController extends AbstractController
             // Deal with the submitted data
             // For example : persiste & flush the entity
             // And redirect to a route that display the result
+
+            // slug
+            $slug = $slugger->slug($program->getTitle()) ;
+            $program->setSlug($slug);
 
             $programRepository->save($program, true); 
 
